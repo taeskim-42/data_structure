@@ -1,5 +1,8 @@
 #ifndef _ARRAYLIST_
 #define _ARRAYLIST_
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
 
 typedef struct ArrayListNodeType
 {
@@ -8,9 +11,9 @@ typedef struct ArrayListNodeType
 
 typedef struct ArrayListType
 {
-	int maxElementCount;		// ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-	int currentElementCount;	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-	ArrayListNode *pElement;	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
+	int maxElementCount;		// ??? ???? ????
+	int currentElementCount;	// ???? ?????? ????
+	ArrayListNode *pElement;	// ???? ?????? ???? 1???? ?ò÷
 } ArrayList;
 
 ArrayList* createArrayList(int maxElementCount);
