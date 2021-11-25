@@ -6,11 +6,11 @@
 /*   By: pacman <pacman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:19:10 by pacman            #+#    #+#             */
-/*   Updated: 2021/11/22 18:16:17 by pacman           ###   ########.fr       */
+/*   Updated: 2021/11/23 15:02:50 by pacman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linkedlist.h"
+#include "../includes/linkedlist.h"
 
 LinkedList* createLinkedList()
 {

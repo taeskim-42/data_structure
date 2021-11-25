@@ -6,11 +6,11 @@
 /*   By: pacman <pacman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 12:26:07 by pacman            #+#    #+#             */
-/*   Updated: 2021/11/22 18:18:03 by pacman           ###   ########.fr       */
+/*   Updated: 2021/11/23 15:00:46 by pacman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "arraylist.h"
+#include "../includes/arraylist.h"
 
 ArrayList*	createArrayList(int maxElementCount)
 {

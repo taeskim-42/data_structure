@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "arraylist.h": "c",
+        "linkedlist.h": "c",
+        "circular.h": "c"
+    }
+}
