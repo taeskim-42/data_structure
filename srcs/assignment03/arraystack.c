@@ -26,7 +26,6 @@ int pushAS(ArrayStack* pStack, ArrayStackNode element)
 	return (TRUE);
 }
 
-
 ArrayStackNode* popAS(ArrayStack* pStack)
 {
 	ArrayStackNode *ret;

@@ -6,7 +6,7 @@
 /*   By: pacman <pacman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 18:32:02 by sujilee           #+#    #+#             */
-/*   Updated: 2021/11/29 17:11:32 by pacman           ###   ########.fr       */
+/*   Updated: 2021/12/01 14:37:09 by pacman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ int main()
 	linkeds = createLinkedStack();
 	while(1)
 	{
-		rewind(stdin);
+		// rewind(stdin);
 		printf("put Push pOp pEek Delete: ");
 		scanf(" %c", &c);
-		rewind(stdin);
+		// rewind(stdin);
 		switch (c)
 		{
 		/*

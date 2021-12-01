@@ -2,6 +2,8 @@
     "files.associations": {
         "arraylist.h": "c",
         "linkedlist.h": "c",
-        "circular.h": "c"
+        "circular.h": "c",
+        "linkedstack.h": "c",
+        "maz_stack.h": "c"
     }
 }
