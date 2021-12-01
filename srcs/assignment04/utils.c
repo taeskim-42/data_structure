@@ -1,85 +1,55 @@
-#include "./maz_stack.h"
+#include "maze_stack.h"
 
-LinkedStack *createLinkedStack()
+char num_to_dir(int i)
 {
-	LinkedStack *Stack;
-	if (!(Stack = (LinkedStack *)calloc(1, sizeof(LinkedStack))))
-		return (NULL);
-	return (Stack);
-}
-
-int pushLSMapPosition(LinkedStack *pStack, MapPosition data)
-{
-	int ret = FALSE;
-	StackNode *newNode = 0;
-
-	if (pStack)
-	{
-		if ((newNode = (StackNode *)calloc(1, sizeof(StackNode))))
-		{
-			newNode->pos = data;
-			pStack->currentElementCount++;
-			newNode->pLink = pStack->pTopElement;
-			pStack->pTopElement = newNode;
-			ret = TRUE;
-		}
-	}
+	if (i == 0)
+		return ('^');
+	else if (i == 1)
+		return ('>');
+	else if (i == 2)
+		return ('v');
+	else if (i == 3)
+		return ('<');
 	else
-		printf("Invalid pStack");
-	return (ret);
+		return ('S');
 }
 
-StackNode *popLSMapPosition(LinkedStack *pStack)
+char *num_to_str(int i)
 {
-	StackNode *ret = 0;
-
-	if (pStack)
-	{
-		if (pStack->currentElementCount != 0)
-		{
-			ret = pStack->pTopElement;
-			pStack->pTopElement = ret->pLink;
-			ret->pLink = 0;
-			pStack->currentElementCount--;
-		}
-	}
+	if (i == 0)
+		return ("UP");
+	else if (i == 1)
+		return ("RIGHT");
+	else if (i == 2)
+		return ("DOWN");
+	else if (i == 3)
+		return ("LEFT");
 	else
-		printf("Invalid pStack");
-	return (ret);
+		return ("START");
 }
 
-void reverseLinkedStack(LinkedStack* pStack) 
+void showPath_on_Maze(LinkedStack *pStack, int mazeArray[HEIGHT][WIDTH])
 {
-    StackNode *pNextNode = NULL, *pCurrentNode = NULL, *pPrevNode = NULL;
-    if (pStack != NULL) 
-    {
-		pCurrentNode = pStack->pTopElement;
-		while (pCurrentNode)
-		{
-			pNextNode = pCurrentNode->pLink;
-			pCurrentNode->pLink = pPrevNode;
-			pPrevNode = pCurrentNode;
-			pCurrentNode = pNextNode;
-		}
-    	pStack->pTopElement = pPrevNode;
-    }
-}
+	StackNode *tmp_node;
+	char map[HEIGHT][WIDTH] = {0, };
 
-void deleteLinkedStack(LinkedStack *pStack)
-{
-	StackNode *tmp;
-
-	if (pStack)
+	reverseLinkedStack(pStack);
+	tmp_node = pStack->pTopElement;
+	printf("PATH ON MAZE========\n");
+	for (int i = 0; i < pStack->currentElementCount; i++)	
 	{
-		while (pStack->currentElementCount > 0)
-		{
-			tmp = popLSMapPosition(pStack);
-			free(tmp);
-			tmp = 0;
-		}
-		free(pStack);
-	    pStack = 0;
+		if (tmp_node->pLink == NULL)
+			map[tmp_node->pos.y][tmp_node->pos.x] = 'E';
+		else
+			map[tmp_node->pos.y][tmp_node->pos.x] = num_to_dir(tmp_node->pLink->pos.dir);
+		tmp_node = tmp_node->pLink;
 	}
-    else
-        printf("invalid pStack\n");
+	for (int i = 0; i < HEIGHT; i++)
+	{
+		for (int j = 0; j < WIDTH; j++)
+			printf("%c ", map[i][j] == 0 ? '-' : map[i][j]);
+		printf("\n");
+	}
+	printf("====================\n");
+	reverseLinkedStack(pStack);
 }
