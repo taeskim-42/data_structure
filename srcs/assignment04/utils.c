@@ -45,11 +45,11 @@ void showPath_on_Maze(LinkedStack *pStack, int mazeArray[HEIGHT][WIDTH])
 		tmp_node = tmp_node->pLink;
 	}
 	for (int i = 0; i < HEIGHT; i++)
-	{
-		for (int j = 0; j < WIDTH; j++)
-			printf("%c ", map[i][j] == 0 ? '-' : map[i][j]);
-		printf("\n");
-	}
+    {
+        for (int j = 0; j < WIDTH; j++)
+            printf("%c ", map[i][j] == 0 ? '.' : map[i][j]);
+        printf("\n");
+    }
 	printf("====================\n");
 	reverseLinkedStack(pStack);
 }

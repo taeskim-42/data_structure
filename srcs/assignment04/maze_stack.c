@@ -131,6 +131,9 @@ int main()
 	printMaze(mazeArray);
 	pushLSMapPosition(pStack, startPos);
 	findPath(mazeArray, startPos, endPos, pStack);
+	showPath(pStack, mazeArray);
+	showPath_on_Maze(pStack, mazeArray);
+	find_ans = 1;
 	if (find_ans == 0)
 		printf("There's no answer.\n");
 	deleteLinkedStack(pStack);
