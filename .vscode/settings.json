@@ -4,6 +4,7 @@
         "linkedlist.h": "c",
         "circular.h": "c",
         "linkedstack.h": "c",
-        "maz_stack.h": "c"
+        "maz_stack.h": "c",
+        "linkeddeque.h": "c"
     }
 }
