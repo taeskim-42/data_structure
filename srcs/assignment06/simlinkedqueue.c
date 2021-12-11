@@ -6,7 +6,7 @@ LinkedQueue *createLinkedQueue(void)
 {
 	LinkedQueue *pQueue;
 
-	pQueue = (LinkedQueue *)calloc(1, sizeof(pQueue));
+	pQueue = (LinkedQueue *)calloc(1, sizeof(LinkedQueue));
 	if (!pQueue)
 		return (NULL);
 	return (pQueue);
@@ -43,7 +43,10 @@ QueueNode *dequeLinkedQueue(LinkedQueue *pQueue)
 	if (isLinkedQueueEmpty(pQueue))
 		return (NULL);
 	node = pQueue->tail->pLink;
-	pQueue->tail->pLink = node->pLink;
+	if (pQueue->tail == node)
+		pQueue->tail = 0;
+	else
+		pQueue->tail->pLink = node->pLink;
 	pQueue->currentElementCount--;
 	return (node);
 }
@@ -59,21 +62,23 @@ QueueNode *peekLinkedQueue(LinkedQueue *pQueue)
 
 void deleteLinkedQueue(LinkedQueue *pQueue)
 {
-	QueueNode *pNode;
+	QueueNode *node;
 	QueueNode *delNode;
 
 	if (!pQueue)
 		return ;
-	pNode =	pQueue->tail;
-	while (pNode)
+    node = pQueue->tail;
+	if (node)
 	{
-		delNode = pNode;
-		pNode = pNode->pLink;
-		free(delNode);
-		delNode = 0;
+		do {
+			printf("%p\n", node);
+			delNode = node;
+			node = node->pLink;
+			free(delNode);
+			delNode = 0;
+		} while(node != pQueue->tail);
 	}
 	free(pQueue);
-	pQueue = 0;
 }
 
 int isLinkedQueueEmpty(LinkedQueue *Queue)

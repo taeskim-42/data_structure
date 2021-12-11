@@ -1,4 +1,5 @@
 #include "../../includes/simlinkedque.h"
+#include <math.h>
 
 void insertCutomer(int arrivalTime, int processTime, LinkedQueue *pQueue) {
 	QueueNode ele;
@@ -16,23 +17,31 @@ void insertCutomer(int arrivalTime, int processTime, LinkedQueue *pQueue) {
 }
 void processArrival(int currentTime, LinkedQueue *pArrivalQueue, LinkedQueue *pWaitQueue) {
     QueueNode *arrivalCustomer;
+	arrivalCustomer = peekLinkedQueue(pArrivalQueue);
+	if (!arrivalCustomer)
+	{
+		printf("도착한 손님이 없습니다.\n");
+		return ;
+	}
+	while (arrivalCustomer->customer.arrivalTime <= currentTime)
+	{
 
-    arrivalCustomer = peekLinkedQueue(pArrivalQueue);
-    if (!arrivalCustomer)
-    {
-        printf("도착한 손님이 없습니다.\n");
-        return ;
-    }
-    if (arrivalCustomer->customer.arrivalTime == currentTime)
-    {
+	    arrivalCustomer = dequeLinkedQueue(pArrivalQueue);
         enqueueLinkedQueue(pWaitQueue, *arrivalCustomer);
         arrivalCustomer->customer.status = 0;
         arrivalCustomer->customer.arrivalTime = 0;
         arrivalCustomer->customer.serviceTime = 0;
         arrivalCustomer->customer.startTime = 0;
         arrivalCustomer->customer.endTime = 0;
+		arrivalCustomer->pLink = 0;
         free(arrivalCustomer);
-    }
+		arrivalCustomer = peekLinkedQueue(pArrivalQueue);
+    	if (!arrivalCustomer)
+		{
+			printf("도착한 손님이 없습니다.\n");
+			return ;
+		}
+	}
 }
 
 QueueNode* processServiceNodeStart(int currentTime, LinkedQueue *pWaitQueue) {
@@ -64,6 +73,7 @@ QueueNode* processServiceNodeEnd(int currentTime, QueueNode *pServiceNode,
 		return (pServiceNode);
 	pServiceNode->customer.status = end;
 	*pServiceUserCount += 1;
+	printf("start : %d\n",pServiceNode->customer.startTime);
 	*pTotalWaitTime += pServiceNode->customer.startTime - pServiceNode->customer.arrivalTime;
 	return (pServiceNode);
 }
@@ -93,8 +103,10 @@ void printWaitQueueStatus(int currentTime, LinkedQueue *pWaitQueue) {
     QueueNode *node;
     char *status[] = {"arrival", "start", "end"};
 
-    if (isLinkedQueueEmpty(pWaitQueue))
+    if (isLinkedQueueEmpty(pWaitQueue)) {
+		printf("wait Queue가 비어있습니다.\n");
         return ;
+	}
     printf("현재 시간 : %d\n", currentTime);
 
     printf("대기열\n");
@@ -109,9 +121,11 @@ void printWaitQueueStatus(int currentTime, LinkedQueue *pWaitQueue) {
 void printReport(LinkedQueue *pWaitQueue,
 				 int serviceUserCount,
 				 int totalWaitTime) {
+	double wait;
+	wait = (double)totalWaitTime / serviceUserCount;
+	if (isnan(wait))
+		wait = 0;
     printf("현재 대기 인원 : %d\n", pWaitQueue->currentElementCount);
     printf("서비스 완료 인원 : %d\n", serviceUserCount);
-    printf("평균 대기 시간 : %f\n", (double)totalWaitTime / serviceUserCount);
+    printf("평균 대기 시간 : %.2f\n", wait);
 }
-
-

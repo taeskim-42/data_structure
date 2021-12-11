@@ -118,11 +118,13 @@
 ==================================================================
 */
 #include <unistd.h>
-
 typedef enum e_cmd {
+	NONE,
 	CUSTOMER,
-	QUEUE,
-	REPORT
+	AQUEUE,
+	WQUEUE,
+	REPORT,
+	EXIT
 }				t_cmd;
 
 int	main(void)
@@ -132,52 +134,29 @@ int	main(void)
 	LinkedQueue *wait;
 	QueueNode *node;
 	SimCustomer sc;
-	t_cmd cmd;
-	int cnt;
-	int wait_time;
+	int cmd;
+	int cnt = 0;
+	int wait_time = 0;
+	int user;
 
 	t = 0;
-	cmd = 0;
 	node = 0;
+	user = 1;
 	arrival = createLinkedQueue();
 	wait = createLinkedQueue();
 	printf("도착 시간과 서비스 시간을 입력해주세요\n");
 	while (scanf("%d %d", &sc.arrivalTime, &sc.serviceTime) != EOF) {
 		insertCutomer(sc.arrivalTime, sc.serviceTime, arrival);
 	}
-	while (TRUE) {
+	rewind(stdin);
+	while (!isLinkedQueueEmpty(arrival) || !isLinkedQueueEmpty(wait)
+			|| node) {
+		printf("현재시간 : %d\n", t);
+		cmd = 0;
 		processArrival(t, arrival, wait);
 		if (!node)
 			node = processServiceNodeStart(t, wait);
-		printSimCustomer(t, node->customer);
-		printf("\n");
 		node = processServiceNodeEnd(t, node, &cnt, &wait_time);
-		//printf("출력하고 싶은 데이터 (숫자로 입력해주세요)\n");
-		//printf("1. 현재 서비스 처리 고객 상태\n");
-		//printf("2. 대기열 상태\n");
-		//printf("3. 서비스 처리 현황\n");
-		//printf("잘못된 값은 스킵으로 판단합니다.\n");
-		//scanf(" %d", &cmd);
-		//switch (cmd) {
-		//	case CUSTOMER:
-		//		if(!node)
-		//			break ;
-		//		printSimCustomer(t, node->customer);
-		//		break ;
-		//	case QUEUE:
-		//		printWaitQueueStatus(t, wait);
-		//		break ;
-		//	case REPORT:
-		//		printReport(wait, cnt, wait_time);
-		//		break ;
-		//	default:
-		//		printf("출력을 스킵하셨습니다.\n");
-		//		break ;
-		//}
-		printWaitQueueStatus(t, wait);
-		if (isLinkedQueueEmpty(arrival) && isLinkedQueueEmpty(wait)
-			&& node && node->customer.status == end)
-			break ;
 		if (node && node->customer.status == end) {
 			node->customer.status = 0;
 			node->customer.arrivalTime = 0;	// 도착 시각.
@@ -186,8 +165,48 @@ int	main(void)
 			node->customer.endTime = 0;
 			free(node);
 			node = NULL;
+			node = processServiceNodeStart(t, wait);
+			user++;
+		}
+		printf("출력하고 싶은 데이터 (숫자로 입력해주세요)\n");
+		printf("1. 현재 서비스 처리 고객 상태\n");
+		printf("2. Arrival 대기열 상태\n");
+		printf("3. Wait 대기열 상태\n");
+		printf("4. 서비스 처리 현황\n");
+		printf("5. 출력모드 종료");
+		while (cmd != EXIT) {
+			scanf("%d", &cmd);
+			switch (cmd) {
+				case CUSTOMER:
+					if(!node) {
+						printf("현재 서비스를 받는 고객이 없습니다.\n");
+						break ;
+					}
+					printf("고객 %d\n", user);
+					printSimCustomer(t, node->customer);
+					break ;
+				case AQUEUE:
+					printf("Arrival Queue\n");
+					printWaitQueueStatus(t, arrival);
+					break ;
+				case WQUEUE:
+					printf("Wait Queue\n");
+					printWaitQueueStatus(t, wait);
+					break ;
+				case REPORT:
+					printReport(wait, cnt, wait_time);
+					break ;
+				case EXIT:
+					break ;
+				default:
+					printf("잘못된 값을 입력했습니다.\n");
+					break ;
+			}
 		}
 		t++;
 		sleep(1);
 	}
+	printReport(wait, cnt, wait_time);
+	deleteLinkedQueue(arrival);
+	deleteLinkedQueue(wait);
 }
