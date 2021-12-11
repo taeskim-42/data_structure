@@ -129,7 +129,7 @@ void    set_Nodes(BinTree *tree)
     {
         memset(position, 0, sizeof(char) * 100);
         printf("=========================================================================\n");
-        printf("\nNode setting option :\n");
+        printf("\n                      Node setting option\n\n");
         printf("    1 : Insert Node    2 : Get Node    3 : Delete Node    4 : Exit \n");
         scanf(" %d", &n);
         if (n == 4)
@@ -202,7 +202,9 @@ void    traversal(BinTree *tree)
 
     while (1)
     {
-        printf("Tree Traversal Option :\n   1 preorder    2 inorder    3 postorder   4 levelOrder    5 exit\n");
+        printf("=========================================================================\n");
+        printf("\n                      Tree Traversal Option\n\n");
+        printf("   1 preorder    2 inorder    3 postorder   4 levelOrder    5 exit\n");
         scanf("%d", &option);
         if (option == 5)
         {
@@ -231,7 +233,10 @@ void    traversal(BinTree *tree)
             }
         }
         if (err_flag == 0)
+        {
             printf("[error] Terminate the program.\n");
+            break;
+        }
     }
 }
 
@@ -246,8 +251,8 @@ void    test()
     tree = makeBinTree(root);
     printf(">> Set the Nodes\n\n");
     set_Nodes(tree);
-    //printf(">> Traversal the Tree\n\n");
-    //traversal(tree);
+    printf(">> Traversal the Tree\n\n");
+    traversal(tree);
     deleteBinTree(tree);
 }
 

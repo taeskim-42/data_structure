@@ -195,10 +195,6 @@ void deleteBinTreeNode(BinTreeNode* pNode)
 
 void preorderTraversalBinTree(BinTree *binTree)
 {
-    if (binTree == NULL)
-    {
-        printf("[error] NULL Parameter : binTree\n");
-    }
     if (binTree)
     {
         preorderTraversalBinTreeNode(binTree->pRootNode);
@@ -208,13 +204,9 @@ void preorderTraversalBinTree(BinTree *binTree)
 
 void preorderTraversalBinTreeNode(BinTreeNode *binTreeNode)
 {
-    if (binTreeNode == NULL)
-    {
-        printf("[error] NULL Parameter : binTreeNode\n");
-    }
     if (binTreeNode)
     {
-        printf("binTreeNode->data: %c", binTreeNode->data);
+        printf("binTreeNode->data: %c\n", binTreeNode->data);
         preorderTraversalBinTreeNode(binTreeNode->pLeftChild);
         preorderTraversalBinTreeNode(binTreeNode->pRightChild);
     }
@@ -231,10 +223,6 @@ void preorderTraversalBinTreeNode(BinTreeNode *binTreeNode)
 
 void inorderTraversalBinTree(BinTree *binTree)
 {
-    if (binTree == NULL)
-    {
-        printf("[error] NULL Parameter : binTree\n");
-    }
     if (binTree)
     {
         inorderTraversalBinTreeNode(binTree->pRootNode);
@@ -244,14 +232,10 @@ void inorderTraversalBinTree(BinTree *binTree)
 
 void inorderTraversalBinTreeNode(BinTreeNode *binTreeNode)
 {
-    if (binTreeNode == NULL)
-    {
-        printf("[error] NULL Parameter : binTreeNode\n");
-    }
     if (binTreeNode)
     {
         inorderTraversalBinTreeNode(binTreeNode->pLeftChild);
-        printf("binTreeNode->data: %c", binTreeNode->data);
+        printf("binTreeNode->data: %c\n", binTreeNode->data);
         inorderTraversalBinTreeNode(binTreeNode->pRightChild);
 
     }
@@ -267,10 +251,6 @@ void inorderTraversalBinTreeNode(BinTreeNode *binTreeNode)
 
 void postorderTraversalBinTree(BinTree *binTree)
 {
-    if (binTree == NULL)
-    {
-        printf("[error] NULL Parameter : binTree\n");
-    }
     if (binTree)
     {
         postorderTraversalBinTreeNode(binTree->pRootNode);
@@ -280,10 +260,6 @@ void postorderTraversalBinTree(BinTree *binTree)
 
 void postorderTraversalBinTreeNode(BinTreeNode *binTreeNode)
 {
-    if (binTreeNode == NULL)
-    {
-        printf("[error] NULL Parameter : binTreeNode\n");
-    }
     if (binTreeNode)
     {
         postorderTraversalBinTreeNode(binTreeNode->pLeftChild);
