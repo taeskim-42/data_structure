@@ -6,6 +6,8 @@
         "linkedstack.h": "c",
         "maz_stack.h": "c",
         "linkeddeque.h": "c",
-        "simlinkedque.h": "c"
+        "simlinkedque.h": "c",
+        "bintree.h": "c",
+        "__node_handle": "c"
     }
 }
