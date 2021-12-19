@@ -7,6 +7,7 @@
 typedef struct ListNodeType
 {
 	int data;
+	int	weight;
 	struct ListNodeType* pLink;
 } ListNode;
 

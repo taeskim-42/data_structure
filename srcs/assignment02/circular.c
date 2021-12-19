@@ -6,7 +6,7 @@
 /*   By: pacman <pacman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 10:34:40 by pacman            #+#    #+#             */
-/*   Updated: 2021/11/25 14:42:23 by pacman           ###   ########.fr       */
+/*   Updated: 2021/12/19 14:20:15 by pacman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,6 @@ int addLLElement(LinkedList* pList, int position, ListNode element)
 		직전노드의 값을 가지고 있음.
 		직전노드의 plink가 position에 있는 노드의 plink로 연결되게 함.
 		그리고 날림.
-
-		
-
 */
 
 int removeLLElement(LinkedList* pList, int position)

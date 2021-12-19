@@ -6,7 +6,7 @@
 /*   By: pacman <pacman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:19:10 by pacman            #+#    #+#             */
-/*   Updated: 2021/11/23 15:02:50 by pacman           ###   ########.fr       */
+/*   Updated: 2021/12/19 14:27:36 by pacman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,18 +142,19 @@ ListNode* getLLElement(LinkedList* pList, int position)
 
 void clearLinkedList(LinkedList* pList)
 {
-    int i;
     ListNode *tmpNode;
-
-    i = -1;
-    tmpNode = 0;
-    if (!pList)
+    ListNode *curr;
+    
+    if (pList)
     {
-        *tmpNode = pList->headerNode;
-        while(++i < pList->currentElementCount)
+        *curr = pList->headerNode;
+        while(curr)
         {
-            tmpNode = tmpNode->pLink;
-            tmpNode->data = 0;
+            tmpNode = curr->pLink;
+            free(curr);
+            curr = 0;
+            curr = tmpNode;
+            pList->currentElementCount--;
         }
     }
 }
