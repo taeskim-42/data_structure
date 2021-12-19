@@ -8,6 +8,8 @@
         "linkeddeque.h": "c",
         "simlinkedque.h": "c",
         "bintree.h": "c",
-        "__node_handle": "c"
+        "__node_handle": "c",
+        "arraygraph.h": "c",
+        "__locale": "c"
     }
 }
