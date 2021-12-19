@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   linkedgraph.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pacman <pacman@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/19 16:24:03 by pacman            #+#    #+#             */
+/*   Updated: 2021/12/19 16:24:03 by pacman           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef _GRAPH_ADJLIST_
 #define _GRAPH_ADJLIST_
 
@@ -79,6 +91,8 @@ int getGraphTypeLG(LinkedGraph* pGraph);
 
 // 그래프 정보 출력
 void displayLinkedGraph(LinkedGraph* pGraph);
+
+void deleteLinkedGraph(LinkedGraph* pGraph);
 #endif
 
 #ifndef _COMMON_GRAPH_DEF_
@@ -96,4 +110,4 @@ void displayLinkedGraph(LinkedGraph* pGraph);
 #define GRAPH_UNDIRECTED	1
 #define GRAPH_DIRECTED		2
 
-#endif%
+#endif

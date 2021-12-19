@@ -2,7 +2,7 @@
 
 void *free_graph(LinkedGraph *pGraph)
 {
-    printf("Malloc Error");
+    printf("Malloc Error\n");
     free(pGraph);
     pGraph = NULL;
     return (NULL);
@@ -55,7 +55,7 @@ LinkedGraph* createLinkedGraph(int maxVertexCount)
     graph->pVertex = (int *)calloc(maxVertexCount, sizeof(int));
     if (!graph->pVertex)
         return (free_graph(graph));
-    graph->ppAdjEdge = (int **)calloc(maxVertexCount, sizeof(int *));
+    graph->ppAdjEdge = (LinkedList **)calloc(maxVertexCount, sizeof(int *));
     if (!graph->ppAdjEdge)
         return(free_vertex(graph));
     for(int i = 0 ; i < maxVertexCount ; i++)
@@ -64,8 +64,9 @@ LinkedGraph* createLinkedGraph(int maxVertexCount)
         if (!graph->ppAdjEdge[i])
             return (free_edgenode(graph, i)); 
     }
-
+    return (graph);
 }
+
 LinkedGraph* createLinkedDirectedGraph(int maxVertexCount)
 {
     LinkedGraph *graph;
@@ -116,6 +117,7 @@ int addEdgeLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID)
         addLLElement(pGraph->ppAdjEdge[toVertexID], elem);
     }
     pGraph->currentEdgeCount++;
+    return (TRUE);
 }
 
 int addEdgewithWeightLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID, int weight)
@@ -131,6 +133,8 @@ int addEdgewithWeightLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID, i
         elem.weight = weight;
         addLLElement(pGraph->ppAdjEdge[toVertexID], elem);
     }
+    pGraph->currentEdgeCount++;
+    return (TRUE);
 }
 
 // 노드의 유효성 점검.
@@ -158,7 +162,7 @@ int removeVertexLG(LinkedGraph* pGraph, int vertexID)
     {
         return (FALSE);
     }
-    curr = pGraph->ppAdjEdge[vertexID];
+    curr = pGraph->ppAdjEdge[vertexID]->frontNode;
     while(curr)
     {
         next = curr->pRLink;
@@ -176,6 +180,14 @@ int removeEdgeLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID)
         !checkVertexValid(pGraph, toVertexID))
         return (FALSE);
     deleteGraphNode(pGraph->ppAdjEdge[fromVertexID], toVertexID);
+    if(pGraph->graphType == GRAPH_UNDIRECTED)
+        deleteGraphNode(pGraph->ppAdjEdge[toVertexID], fromVertexID);
+    return (TRUE);
+}
+
+void deleteGraphNode(LinkedList* pList, int delVertexID)
+{
+    removeLLElement(pList, delVertexID);
 }
 
 // 노드 개수 반환
@@ -195,3 +207,136 @@ int getGraphTypeLG(LinkedGraph* pGraph)
 {
     return (!pGraph ? FALSE : pGraph->graphType);
 }
+
+void displayLinnkedList(LinkedList* pList)
+{
+    ListNode *curr;
+    ListNode *next;
+
+    curr = pList->frontNode;
+    while(curr)
+    {
+        next = curr->pRLink;
+        printf("[%d : %d] ", curr->data, curr->weight);
+        curr = next;
+    }
+    printf("\n");
+}
+
+void displayLinkedGraph(LinkedGraph* pGraph)
+{
+    if(!pGraph || !pGraph->pVertex || !pGraph->ppAdjEdge)
+        return ;
+    printf("========Info==========\n");
+    printf("maxVertexCount : %d\n", pGraph->maxVertexCount);
+    printf("currentVertexCount : %d\n", pGraph->currentVertexCount);
+    printf("currentEdgeCount : %d\n", pGraph->currentEdgeCount);
+    printf("graphType : ");
+    if(pGraph->graphType == GRAPH_UNDIRECTED)
+        printf("GRAPH_UNDIRECTED\n");
+    else
+        printf("GRAPH_DIRECTED\n");
+    printf("========Graph=========\n"); 
+    for(int i = 0 ; i < pGraph->maxVertexCount ; i++)
+    {
+        printf("%d : ", i);
+        displayLinnkedList(pGraph->ppAdjEdge[i]);    
+    }
+    printf("======================\n");
+}
+
+void deleteLinkedGraph(LinkedGraph* pGraph)
+{
+    for(int i = 0 ; i < pGraph->maxVertexCount ; i++)
+    {
+        deleteLinkedList(pGraph->ppAdjEdge[i]);
+        pGraph->ppAdjEdge[i] = 0;
+    }
+    free(pGraph->ppAdjEdge);
+    pGraph->ppAdjEdge = 0;
+    free(pGraph->pVertex);
+    pGraph->pVertex = 0;
+    free(pGraph);
+    pGraph = 0;
+}
+
+void test()
+{
+    int i = 0;
+    LinkedGraph *pG1 = 0;
+    LinkedGraph *pG2 = 0;
+    LinkedGraph *pG4 = 0;
+
+    pG1 = createLinkedGraph(6);
+    pG2 = createLinkedDirectedGraph(6);
+    pG4 = createLinkedDirectedGraph(6);
+    if (pG1 && pG2 && pG4)
+    {
+        for (i = 0; i < 6; i++)
+        {
+            addVertexLG(pG1, i);
+            addVertexLG(pG2, i);
+            addVertexLG(pG4, i);
+        }
+
+        addEdgeLG(pG1, 0, 1);
+        addEdgeLG(pG1, 0, 2);
+        addEdgeLG(pG1, 1, 2);
+        addEdgeLG(pG1, 2, 3);
+        addEdgeLG(pG1, 3, 4);
+        addEdgeLG(pG1, 3, 5);
+        addEdgeLG(pG1, 4, 5);
+
+        addEdgeLG(pG2, 0, 1);
+        addEdgeLG(pG2, 1, 2);
+        addEdgeLG(pG2, 2, 0);
+        addEdgeLG(pG2, 2, 1);
+        addEdgeLG(pG2, 2, 3);
+        addEdgeLG(pG2, 3, 2);
+        addEdgeLG(pG2, 3, 4);
+        addEdgeLG(pG2, 4, 5);
+        addEdgeLG(pG2, 5, 3);
+        
+        addEdgewithWeightLG(pG4, 0, 1, 4);
+        addEdgewithWeightLG(pG4, 1, 2, 1);
+        addEdgewithWeightLG(pG4, 2, 0, 2);
+        addEdgewithWeightLG(pG4, 2, 1, 3);
+        addEdgewithWeightLG(pG4, 2, 3, 2);
+        addEdgewithWeightLG(pG4, 3, 2, 1);
+        addEdgewithWeightLG(pG4, 3, 4, 1);
+        addEdgewithWeightLG(pG4, 4, 5, 1);
+        addEdgewithWeightLG(pG4, 5, 3, 2);
+
+        printf("G1: Undirected\n");
+        displayLinkedGraph(pG1);
+        printf("G2: Directed\n");
+        displayLinkedGraph(pG2);
+        printf("G4: Directed Weighted\n");
+        displayLinkedGraph(pG4);
+
+        deleteLinkedGraph(pG1);
+        deleteLinkedGraph(pG2);
+        deleteLinkedGraph(pG4);
+    }
+}
+
+int main()
+{
+    test();
+    system("leaks a.out");
+    return 0;
+}
+
+// 0 : [1 : 0] [2 : 0] 
+// 1 : [0 : 0] [2 : 0] 
+// 2 : [0 : 0] [1 : 0] [3 : 0] 
+// 3 : [2 : 0] [4 : 0] [5 : 0] 
+// 4 : [3 : 0] [5 : 0] 
+// 5 : [3 : 0] [4 : 0] 
+
+// 0 : 
+// 1 : [2 : 0] 
+// 2 : [1 : 0] [3 : 0] 
+// 3 : [2 : 0] [5 : 0] 
+// 4 : [5 : 0] 
+// 5 : [3 : 0] [4 : 0] 

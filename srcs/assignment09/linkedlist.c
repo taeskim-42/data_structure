@@ -80,16 +80,15 @@ void clearLinkedList(LinkedList* pList)
     ListNode *tmpNode;
     ListNode *curr;
     
-    if (pList)
+    if (!pList)
+        return ;
+    curr = pList->frontNode;
+    while (curr)
     {
-        curr = pList->frontNode;
-        while(curr)
-        {
-            tmpNode = curr->pRLink;
-            free(curr);
-            curr = 0;
-            curr = tmpNode;
-        }
+        tmpNode = curr->pRLink;
+        free(curr);
+        curr = 0;
+        curr = tmpNode;
     }
     pList->frontNode = pList->rearNode = NULL;
 }
