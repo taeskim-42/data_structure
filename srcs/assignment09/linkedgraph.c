@@ -81,9 +81,6 @@ LinkedGraph* createLinkedDirectedGraph(int maxVertexCount)
     return (graph);
 }
 
-// 그래프 삭제
-void deleteLinkedGraph(LinkedGraph* pGraph);
-
 // 공백 그래프 여부 판단
 int isEmptyLG(LinkedGraph* pGraph);
 
@@ -106,7 +103,7 @@ int addVertexLG(LinkedGraph* pGraph, int vertexID)
 // 간선 추가
 int addEdgeLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID)
 {
-    ListNode elem = {toVertexID, 0, 0};
+    ListNode elem = {toVertexID, 0, 0, 0};
     if(!checkVertexValid(pGraph, fromVertexID) || 
         !checkVertexValid(pGraph, toVertexID))
         return (FALSE);
@@ -122,7 +119,7 @@ int addEdgeLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID)
 
 int addEdgewithWeightLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID, int weight)
 {
-    ListNode elem = {toVertexID, weight, 0};
+    ListNode elem = {toVertexID, weight, 0, 0};
     if(!checkVertexValid(pGraph, fromVertexID) || 
         !checkVertexValid(pGraph, toVertexID))
         return (FALSE);
@@ -140,42 +137,41 @@ int addEdgewithWeightLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID, i
 // 노드의 유효성 점검.
 int checkVertexValid(LinkedGraph* pGraph, int vertexID)
 {
-    if(!pGraph || !pGraph->pVertex || !pGraph->ppAdjEdge)
+    if(!pGraph || !pGraph->pVertex || !pGraph->ppAdjEdge ||
+        !pGraph->ppAdjEdge[vertexID])
         return (FALSE);
-    if (vertexID >= pGraph->maxVertexCount ||\
+    if (vertexID >= pGraph->maxVertexCount ||
         pGraph->pVertex[vertexID] == NOT_USED)
-    {
-        printf("node is not valid\n");
         return (FALSE);
-    }
     return (TRUE);
 }
 
 // 노드 제거
 int removeVertexLG(LinkedGraph* pGraph, int vertexID)
 {
-    ListNode *curr;
-    ListNode *next;
-
+    ListNode    *curr;
+    ListNode    *next;
+    int         data;
     if (!checkVertexValid(pGraph, vertexID)|| pGraph->currentVertexCount <= 0 ||
         vertexID >= pGraph->maxVertexCount)
-    {
         return (FALSE);
-    }
     curr = pGraph->ppAdjEdge[vertexID]->frontNode;
+    if(!curr)
+        return (FALSE);
     while(curr)
     {
         next = curr->pRLink;
-        removeEdgeLG(pGraph, vertexID, curr->data);
+        data = curr->data;
+        removeEdgeLG(pGraph, vertexID, data);
         if(pGraph->graphType == GRAPH_DIRECTED)
-            removeEdgeLG(pGraph, curr->data, vertexID);
+            removeEdgeLG(pGraph, data, vertexID);
         curr = next;
     }
     return (TRUE);
 }
 
 int removeEdgeLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID)
-{
+{    
     if(!checkVertexValid(pGraph, fromVertexID) || 
         !checkVertexValid(pGraph, toVertexID))
         return (FALSE);
@@ -187,7 +183,8 @@ int removeEdgeLG(LinkedGraph* pGraph, int fromVertexID, int toVertexID)
 
 void deleteGraphNode(LinkedList* pList, int delVertexID)
 {
-    removeLLElement(pList, delVertexID);
+    if(pList && pList->frontNode)
+        removeLLElement(pList, delVertexID);
 }
 
 // 노드 개수 반환
@@ -227,7 +224,7 @@ void displayLinkedGraph(LinkedGraph* pGraph)
 {
     if(!pGraph || !pGraph->pVertex || !pGraph->ppAdjEdge)
         return ;
-    printf("========Info==========\n");
+    printf("\n========Info==========\n");
     printf("maxVertexCount : %d\n", pGraph->maxVertexCount);
     printf("currentVertexCount : %d\n", pGraph->currentVertexCount);
     printf("currentEdgeCount : %d\n", pGraph->currentEdgeCount);
@@ -249,7 +246,9 @@ void deleteLinkedGraph(LinkedGraph* pGraph)
 {
     for(int i = 0 ; i < pGraph->maxVertexCount ; i++)
     {
-        deleteLinkedList(pGraph->ppAdjEdge[i]);
+        removeVertexLG(pGraph, i);
+        free(pGraph->ppAdjEdge[i]);
+        // deleteLinkedList(pGraph->ppAdjEdge[i]);
         pGraph->ppAdjEdge[i] = 0;
     }
     free(pGraph->ppAdjEdge);
@@ -307,8 +306,8 @@ void test()
         addEdgewithWeightLG(pG4, 4, 5, 1);
         addEdgewithWeightLG(pG4, 5, 3, 2);
 
-        printf("G1: Undirected\n");
-        displayLinkedGraph(pG1);
+        //printf("G1: Undirected\n");
+        //displayLinkedGraph(pG1);
         printf("G2: Directed\n");
         displayLinkedGraph(pG2);
         printf("G4: Directed Weighted\n");
@@ -317,6 +316,13 @@ void test()
         deleteLinkedGraph(pG1);
         deleteLinkedGraph(pG2);
         deleteLinkedGraph(pG4);
+
+        //printf("G1: Undirected\n");
+        //displayLinkedGraph(pG1);
+        printf("G2: Directed\n");
+        displayLinkedGraph(pG2);
+        printf("G4: Directed Weighted\n");
+        displayLinkedGraph(pG4);
     }
 }
 

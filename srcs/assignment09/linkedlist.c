@@ -43,7 +43,11 @@ int removeLLElement(LinkedList* pList, int VertexID)
     tmp = getLLElement(pList, VertexID);
     if(!tmp)
         return (FALSE);
-    if(tmp != pList->frontNode)
+    if(pList->frontNode == pList->rearNode)
+    {
+        pList->frontNode = pList->rearNode = NULL;
+    }
+    else if(tmp != pList->frontNode)
     {
         front = tmp->pLLink;
         front->pRLink = tmp->pRLink;
@@ -54,9 +58,10 @@ int removeLLElement(LinkedList* pList, int VertexID)
         }
     }
     else
+    {
         pList->frontNode = tmp->pRLink;
-    if(pList->frontNode)
-        pList->rearNode = NULL;
+        pList->frontNode->pLLink = NULL;
+    }
     free(tmp);
     return (TRUE);
 }
@@ -66,6 +71,8 @@ ListNode* getLLElement(LinkedList* pList, int VertexID)
     ListNode *tmp;
 
     tmp = pList->frontNode;
+    if(!tmp)
+        return (FALSE);
     while(tmp)
     {
         if(tmp->data == VertexID)
